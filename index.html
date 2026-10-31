@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spendly</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header: app title + theme toggle -->
+  <header class="app-header">
+    <div class="app-header-brand">
+      <h1>Spendly</h1>
+      <p class="app-tagline">YOUR MONEY, CLEARER.</p>
+    </div>
+    <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+  </header>
+
+  <main class="app-grid">
+
+    <!-- Left column: form, sort controls, transaction list -->
+    <section class="col-left">
+
+      <!-- Transaction input form -->
+      <form id="transaction-form" novalidate>
+        <div class="form-field">
+          <label for="input-name" class="field-label">Transaction Name</label>
+          <input id="input-name" type="text" placeholder="e.g. Lunch, Grab, Coffee" autocomplete="off">
+          <span id="error-name" class="error" aria-live="polite"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="input-amount" class="field-label">Amount (IDR)</label>
+          <input id="input-amount" type="text" inputmode="numeric" placeholder="e.g. 50.000 or 50000" autocomplete="off">
+          <span id="error-amount" class="error" aria-live="polite"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="input-category" class="field-label">Category</label>
+          <select id="input-category">
+            <option value="">Select category</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Fun">Fun</option>
+          </select>
+        </div>
+
+        <button type="submit">Add Transaction</button>
+      </form>
+
+      <!-- Sort controls -->
+      <p class="field-label" style="margin-top:1.5rem;margin-bottom:0.4rem;">Sort by</p>
+      <div id="sort-controls" role="group" aria-label="Sort transactions">
+        <button data-sort="none">Default</button>
+        <button data-sort="amount-asc">Amount ↑</button>
+        <button data-sort="amount-desc">Amount ↓</button>
+        <button data-sort="category">Category</button>
+      </div>
+
+      <!-- Transaction list -->
+      <div id="transaction-list" class="transaction-list"></div>
+
+    </section>
+
+    <!-- Right column: totals, chart, monthly summary -->
+    <section class="col-right">
+
+      <!-- Total spending -->
+      <div class="total-block">
+        <p class="total-label">Total Spending</p>
+        <div id="total-spending"></div>
+      </div>
+
+      <!-- Pie chart -->
+      <div id="chart-container">
+        <canvas id="spending-chart"></canvas>
+        <div id="chart-empty" class="empty-state" hidden>No data yet</div>
+      </div>
+
+      <!-- Monthly summary -->
+      <div id="monthly-summary">
+        <p class="monthly-summary-title">Monthly Breakdown</p>
+        <div id="month-nav">
+          <button id="month-prev" aria-label="Previous month">‹</button>
+          <span id="month-label"></span>
+          <button id="month-next" aria-label="Next month">›</button>
+        </div>
+        <div id="month-totals"></div>
+        <div id="monthly-empty" class="empty-state" hidden>No transactions yet</div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

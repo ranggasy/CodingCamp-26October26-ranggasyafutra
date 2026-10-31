@@ -1,0 +1,525 @@
+/* ============================================================
+   Spendly — CSS Custom Properties & Base Reset
+   ============================================================ */
+
+/* --- Light mode palette (default) --- */
+:root {
+  --color-bg: #F7F7F3;
+  --color-accent: #173C32;
+  --color-text: #172B26;
+  --color-surface: #FFFFFF;
+  --color-muted: #888;
+  --color-separator: #E0DDD8;
+}
+
+/* --- Dark mode overrides --- */
+[data-theme="dark"] {
+  --color-bg: #1A1A1A;
+  --color-accent: #4CAF78;
+  --color-text: #E8E8E2;
+  --color-surface: #2A2A2A;
+  --color-muted: #AAA;
+  --color-separator: #333;
+}
+
+/* --- Box-sizing reset --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* --- Body base styles --- */
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* ============================================================
+   App Header
+   ============================================================ */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--color-separator);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1.1;
+}
+
+/* ============================================================
+   Two-Column Grid Layout — Requirements 6.1, 6.2
+   ============================================================ */
+
+.app-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Responsive: single column on mobile (≤768 px) --- */
+@media (max-width: 768px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+}
+
+/* ============================================================
+   Task 2.3 — Form, Sort Controls, Transaction List, Empty States
+   ============================================================ */
+
+/* --- Section heading above form --- */
+.section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  margin: 0 0 0.75rem;
+}
+
+/* --- Transaction input form --- */
+#transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* --- Form inputs and select --- */
+#input-name,
+#input-amount,
+#input-category {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-separator);
+  border-radius: 3px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#input-name:focus,
+#input-amount:focus,
+#input-category:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 15%, transparent);
+}
+
+/* Remove spinner arrows from number input (optional polish) */
+#input-amount::-webkit-inner-spin-button,
+#input-amount::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* --- Submit button --- */
+#transaction-form button[type="submit"] {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-top: 0.25rem;
+}
+
+#transaction-form button[type="submit"]:hover {
+  opacity: 0.88;
+}
+
+/* --- Inline validation error spans --- */
+.error {
+  display: block;
+  color: #d93025;
+  font-size: 0.8rem;
+  margin-top: -0.25rem; /* tighten gap between input and error */
+}
+
+.error:empty {
+  display: none;
+}
+
+/* ============================================================
+   Sort Controls
+   ============================================================ */
+
+#sort-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0;
+}
+
+#sort-controls button {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--color-separator);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+#sort-controls button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+#sort-controls button.active {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* ============================================================
+   Transaction List
+   ============================================================ */
+
+.transaction-list {
+  max-height: 420px;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+
+/* Subtle scrollbar styling for webkit */
+.transaction-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.transaction-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.transaction-list::-webkit-scrollbar-thumb {
+  background: var(--color-separator);
+  border-radius: 2px;
+}
+
+/* --- Transaction row (flat, no card) --- */
+.transaction-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-separator);
+  gap: 0.5rem;
+  /* No background, no box-shadow, no border-radius */
+}
+
+/* Left group: name + meta */
+.transaction-item .tx-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0; /* allow text truncation */
+}
+
+.transaction-item .tx-name {
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transaction-item .tx-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.transaction-item .tx-category {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.transaction-item .tx-date {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+
+/* Right group: amount + delete */
+.transaction-item .tx-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.transaction-item .tx-amount {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-accent);
+  white-space: nowrap;
+  /* tabular figures for alignment */
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Delete button: hidden until row is hovered --- */
+.transaction-item .tx-delete {
+  background: none;
+  border: none;
+  padding: 0 0.2rem;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--color-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.transaction-item:hover .tx-delete,
+.transaction-item:focus-within .tx-delete {
+  opacity: 1;
+}
+
+.transaction-item .tx-delete:hover {
+  color: #d93025;
+}
+
+/* ============================================================
+   Empty States
+   ============================================================ */
+
+.empty-state {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   Task 2.4 — Total Spending, Chart, Monthly Summary, Theme Toggle
+   ============================================================ */
+
+/* --- Theme toggle button (header) --- */
+#theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--color-text);
+  padding: 0.25rem;
+  line-height: 1;
+}
+
+/* ============================================================
+   Total Spending — Requirements 3.1
+   ============================================================ */
+
+/* Small uppercase label above the figure */
+.total-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  margin: 0 0 0.25rem;
+}
+
+/* Large display figure */
+#total-spending {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   Chart Container — Requirements 4.5
+   ============================================================ */
+
+#chart-container {
+  position: relative;
+  margin-top: 1.25rem;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#chart-container canvas {
+  width: 100% !important;
+}
+
+/* #chart-empty reuses .empty-state — no extra rules needed */
+
+/* ============================================================
+   Monthly Summary — Requirements 8.1, 8.8
+   ============================================================ */
+
+#monthly-summary {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-separator);
+}
+
+/* Section heading */
+.monthly-summary-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-muted);
+  margin: 0 0 0.75rem;
+}
+
+/* Month navigation row */
+#month-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Month label (e.g. "July 2025") */
+#month-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Prev / Next buttons */
+#month-prev,
+#month-next {
+  background: none;
+  border: 1px solid var(--color-separator);
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1;
+  border-radius: 3px;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+#month-prev:hover:not(:disabled),
+#month-next:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+#month-prev:disabled,
+#month-next:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Monthly totals block */
+#month-totals {
+  margin-top: 0.25rem;
+}
+
+/* Grand total for the month */
+.month-grand-total {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Per-category breakdown rows — flat hairline, like transaction rows */
+.month-category-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--color-separator);
+}
+
+.month-category-row .month-cat-name {
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.month-category-row .month-cat-amount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* #monthly-empty reuses .empty-state — no extra rules needed */
+
+/* ============================================================
+   Additions — tagline, form fields, total block, mobile delete
+   ============================================================ */
+
+/* App header tagline */
+.app-tagline {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin: 0.1rem 0 0;
+}
+
+/* App header brand group layout */
+.app-header-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form field wrapper */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* Field label (above inputs) */
+.field-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+/* Total spending block */
+.total-block {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-separator);
+  margin-bottom: 0.5rem;
+}
+
+/* Delete button always visible on touch/mobile */
+@media (max-width: 768px) {
+  .transaction-item .tx-delete {
+    opacity: 1;
+  }
+}
