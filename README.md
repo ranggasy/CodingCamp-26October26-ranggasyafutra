@@ -101,8 +101,6 @@ This project was developed as part of **RevoU Coding Camp** to practice fundamen
 
 **Rangga Syafutra**
 
-Developed for RevoU Coding Camp.
-
 ---
 
 *Spendly – Your Money, Clearer.*
